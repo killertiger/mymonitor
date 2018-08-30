@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if history_list %}
+    <ul>
+    {% for history in history_list %}
+        <li>{{ history.query }} -  {{ history.total }} - {{ history.created_date }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No history available</p>
+{% endif %}
+</body>
+</html>

@@ -1,10 +1,9 @@
 import mysql.connector
 
-from django.core.management import BaseCommand
-from dbmonitor.models import Query, ExecutionHistory
+from dbmonitor.models import ExecutionHistory, Query
 
 
-class Command(BaseCommand):
+class ValidatorBusiness:
     def get_conector(self, connection, database='mysql'):
         db = mysql.connector.connect(host=connection.host, user=connection.username, password=connection.password,
                                      database=database)
@@ -30,9 +29,9 @@ class Command(BaseCommand):
 
         try:
             sql = "SELECT DISTINCT SCHEMA_NAME AS `database` " \
-                           " FROM information_schema.SCHEMATA " \
-                           " WHERE {} " \
-                           " ORDER BY SCHEMA_NAME".format(rule.rule_text)
+                  " FROM information_schema.SCHEMATA " \
+                  " WHERE {} " \
+                  " ORDER BY SCHEMA_NAME".format(rule.rule_text)
             cursor.execute(sql)
             query_result = cursor.fetchall()
 
@@ -50,7 +49,7 @@ class Command(BaseCommand):
         history = ExecutionHistory(query=query, total=len(found_list), result_text=text)
         history.save()
 
-    def handle(self, *args, **options):
+    def validate_all_monitors(self):
         queries = Query.objects.all()
         for query in queries:
             found_list = []

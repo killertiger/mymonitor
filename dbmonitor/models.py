@@ -32,6 +32,7 @@ class Query(BaseModel):
     connection = models.ForeignKey(Connection, null=True, on_delete=True)
     name = models.CharField(max_length=100)
     text = models.TextField(max_length=500)
+#    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
