@@ -8,14 +8,21 @@ from dbmonitor.models import Query, ExecutionHistory
 
 def index(request):
     queries = Query.objects.all()
-    history_list = []
+    queries_succeed = []
+    queries_failed = []
+
     for query in queries:
         history = ExecutionHistory.objects.filter(query=query).order_by('-created_date').first()
-        history_list.append(history)
+        if history:
+            if history.total == 0:
+                queries_succeed.append(history)
+            else:
+                queries_failed.append(history)
 
     template = loader.get_template('dbmonitor/index2.html')
     context = {
-        'history_list': history_list,
+        'queries_succeed': queries_succeed,
+        'queries_failed': queries_failed,
     }
 
     return HttpResponse(template.render(context, request))

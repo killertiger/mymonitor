@@ -374,12 +374,13 @@
             <!-- Bread crumb -->
             <div class="row page-titles">
                 <div class="col-md-5 align-self-center">
-                    <h3 class="text-primary">Dashboard</h3> </div>
+                    <h3 class="text-primary">Dashboard</h3></div>
                 <div class="col-md-7 align-self-center">
-                    <ol class="breadcrumb">
+                    <a href="run_all_validators" target="_blank">Executar</a>
+                    <!--<ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
                         <li class="breadcrumb-item active">Dashboard</li>
-                    </ol>
+                    </ol>-->
                 </div>
             </div>
             <!-- End Bread crumb -->
@@ -387,32 +388,6 @@
             <div class="container-fluid">
                 <!-- Start Page Content -->
                 <div class="row">
-                    <!--div class="col-md-3">
-                        <div class="card bg-primary p-20">
-                            <div class="media widget-ten">
-                                <div class="media-left meida media-middle">
-                                    <span><i class="ti-bag f-s-40"></i></span>
-                                </div>
-                                <div class="media-body media-text-right">
-                                    <h2 class="color-white">278</h2>
-                                    <p class="m-b-0">New Posts</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card bg-pink p-20">
-                            <div class="media widget-ten">
-                                <div class="media-left meida media-middle">
-                                    <span><i class="ti-comment f-s-40"></i></span>
-                                </div>
-                                <div class="media-body media-text-right">
-                                    <h2 class="color-white">278</h2>
-                                    <p class="m-b-0">New Comment</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div-->
                     <div class="col-md-3">
                         <div class="card bg-success p-20">
                             <div class="media widget-ten">
@@ -420,24 +395,52 @@
                                     <span><i class="ti-vector f-s-40"></i></span>
                                 </div>
                                 <div class="media-body media-text-right">
-                                    <h2 class="color-white">$27647</h2>
-                                    <p class="m-b-0">Bounce Rate</p>
+                                    <h2 class="color-white">{{ queries_succeed | length }}</h2>
+                                    <p class="m-b-0">Sucesso</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
                         <div class="card bg-danger p-20">
                             <div class="media widget-ten">
                                 <div class="media-left meida media-middle">
                                     <span><i class="ti-location-pin f-s-40"></i></span>
                                 </div>
                                 <div class="media-body media-text-right">
-                                    <h2 class="color-white">278</h2>
-                                    <p class="m-b-0">Total Visitor</p>
+                                    <h2 class="color-white">{{ queries_failed | length }}</h2>
+                                    <p class="m-b-0">Erros</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-title">
+                                <h4>Alertas</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover ">
+                                        <thead>
+                                        <tr>
+                                            <th>Consulta</th>
+                                            <th>Data</th>
+                                            <th>Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for history in queries_failed %}
+                                            <tr>
+                                                <td>{{ history.query }}</td>
+                                                <td>{{ history.created_date }}</td>
+                                                <td>{{ history.total }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -470,7 +473,7 @@
 											</tr>
 										</thead>
 										<tbody>
-                                        {% for history in history_list %}
+                                        {% for history in queries_failed %}
 											<tr>
 												<td>{{ history.query }}</td>
 												<td>{{ history.created_date }}</td>
