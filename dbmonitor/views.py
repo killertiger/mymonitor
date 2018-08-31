@@ -13,7 +13,7 @@ def index(request):
         history = ExecutionHistory.objects.filter(query=query).order_by('-created_date').first()
         history_list.append(history)
 
-    template = loader.get_template('dbmonitor/index.html')
+    template = loader.get_template('dbmonitor/index2.html')
     context = {
         'history_list': history_list,
     }
