@@ -7,7 +7,7 @@ from dbmonitor.models import Query, ExecutionHistory
 
 
 def index(request):
-    queries = Query.objects.all()
+    queries = Query.objects.filter(is_active=True)
     queries_succeed = []
     queries_failed = []
 
@@ -19,7 +19,7 @@ def index(request):
             else:
                 queries_failed.append(history)
 
-    template = loader.get_template('dbmonitor/index2.html')
+    template = loader.get_template('dbmonitor/index.html')
     context = {
         'queries_succeed': queries_succeed,
         'queries_failed': queries_failed,

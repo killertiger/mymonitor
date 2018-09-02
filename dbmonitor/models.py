@@ -31,8 +31,8 @@ class Query(BaseModel):
     rule = models.ForeignKey(Rule, on_delete=True)
     connection = models.ForeignKey(Connection, null=True, on_delete=True)
     name = models.CharField(max_length=100)
-    text = models.TextField(max_length=500)
-#    is_active = models.BooleanField(default=True)
+    text = models.TextField()
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -41,4 +41,9 @@ class Query(BaseModel):
 class ExecutionHistory(BaseModel):
     query = models.ForeignKey(Query, on_delete=True)
     total = models.IntegerField()
-    result_text = models.TextField(max_length=1000)
+
+
+class ExecutionHistoryDetail(BaseModel):
+    execution_history = models.ForeignKey(ExecutionHistory, on_delete=True)
+    database_name = models.CharField(max_length=100)
+    total = models.IntegerField()

@@ -1,6 +1,6 @@
 import mysql.connector
 
-from dbmonitor.models import ExecutionHistory, Query
+from dbmonitor.models import ExecutionHistory, Query, ExecutionHistoryDetail
 
 
 class ValidatorBusiness:
@@ -41,22 +41,21 @@ class ValidatorBusiness:
             db.close()
 
     def register_history(self, query, found_list):
-        text = ""
-        for found in found_list:
-            text += text + "\r\n{} - {}".format(found['database'], found['count'])
-        # TODO: Alterar para: output = ', '.join([q.question_text for q in latest_question_list])
-
-        history = ExecutionHistory(query=query, total=len(found_list), result_text=text)
+        history = ExecutionHistory(query=query, total=len(found_list))
         history.save()
 
+        for found in found_list:
+            detail = ExecutionHistoryDetail(execution_history=history, database_name=found["database"],
+                                            total=found["count"])
+            detail.save()
+
     def validate_all_monitors(self):
-        queries = Query.objects.all()
+        queries = Query.objects.filter(is_active=True)
         for query in queries:
             found_list = []
             dblist = self.get_databases(query.connection, query.rule)
             for db in dblist:
                 row_count = self.execute_query(db[0], query)
-                if row_count > 0:
-                    found_list.append({'database': db[0], 'count': row_count})
+                found_list.append({'database': db[0], 'count': row_count})
             self.register_history(query, found_list)
 

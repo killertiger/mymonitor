@@ -1,20 +1,176 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
 
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+    <title>Ela - Bootstrap Admin Dashboard Template</title>
+
+    <link href="{% static "css/lib/chartist/chartist.min.css"%}" rel="stylesheet">
+	<link href="{% static "css/lib/owl.carousel.min.css"%}" rel="stylesheet" />
+    <link href="{% static "css/lib/owl.theme.default.min.css"%}" rel="stylesheet" />
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static "css/lib/bootstrap/bootstrap.min.css"%}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static "css/helper.css"%}" rel="stylesheet">
+    <link href="{% static "css/style.css"%}" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:** -->
+    <!--[if lt IE 9]>
+    <script src="https:**oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https:**oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
 </head>
-<body>
-{% if history_list %}
-    <ul>
-    {% for history in history_list %}
-        <li>{{ history.query }} -  {{ history.total }} - {{ history.created_date }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No history available</p>
-{% endif %}
+
+<body class="fix-header fix-sidebar">
+    <!-- Preloader - style you can find in spinners.css -->
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+			<circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+    </div>
+    <!-- Main wrapper  -->
+    <div id="main-wrapper">
+        <!-- header header  -->
+        <div class="header">
+            <nav class="navbar top-navbar navbar-expand-md navbar-light">
+                <!-- Logo -->
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index.html">
+                        <!-- Logo icon -->
+                        <b><img src="{% static "images/logo.png"%}" alt="homepage" class="dark-logo" /></b>
+                        <!--End Logo icon -->
+                        <!-- Logo text -->
+                        <span><img src="{% static "images/logo-text.png"%}" alt="homepage" class="dark-logo" /></span>
+                    </a>
+                </div>
+                <!-- End Logo -->
+                <div class="navbar-collapse">
+                    <!-- toggle and nav items -->
+                    <ul class="navbar-nav mr-auto mt-md-0">
+                        <!-- This is  -->
+                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted  " href="javascript:void(0)"><i class="mdi mdi-menu"></i></a> </li>
+                        <li class="nav-item m-l-10"> <a class="nav-link sidebartoggler hidden-sm-down text-muted" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                        <li class="nav-item m-l-10"> <a class="nav-link sidebartoggler hidden-sm-down text-muted" href="run_all_validators" target="_blank"><i class="ti-control-play"></i></a> </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!-- End header header -->
+        <!-- Page wrapper  -->
+        <div class="">
+            <!-- Container fluid  -->
+            <div class="container-fluid">
+                <!-- Start Page Content -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card bg-success p-20">
+                            <div class="media widget-ten">
+                                <div class="media-left meida media-middle">
+                                    <span><i class="ti-vector f-s-40"></i></span>
+                                </div>
+                                <div class="media-body media-text-right">
+                                    <h2 class="color-white">{{ queries_succeed | length }}</h2>
+                                    <p class="m-b-0">Sucesso</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card bg-danger p-20">
+                            <div class="media widget-ten">
+                                <div class="media-left meida media-middle">
+                                    <span><i class="ti-location-pin f-s-40"></i></span>
+                                </div>
+                                <div class="media-body media-text-right">
+                                    <h2 class="color-white">{{ queries_failed | length }}</h2>
+                                    <p class="m-b-0">Erros</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-title">
+                                <h4>Alertas</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover ">
+                                        <thead>
+                                        <tr>
+                                            <th>Query</th>
+                                            <th>Database</th>
+                                            <th>Date</th>
+                                            <th>Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for history in queries_failed %}
+                                            {% for detail in history.executionhistorydetail_set.all %}
+                                                {% if detail.total > 0 %}
+                                            <tr>
+                                                <td>{{ history.query }}</td>
+                                                <td>{{ history.created_date | date:"d/m/Y H:i:s"}}</td>
+                                                <td>{{ detail.database_name }}</td>
+                                                <td>{{ detail.total }}</td>
+                                            </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- End PAge Content -->
+            </div>
+            <!-- End Container fluid  -->
+            <!-- footer -->
+            <footer class="footer"> © 2018 All rights reserved. Template designed by <a href="https://colorlib.com">Colorlib</a></footer>
+            <!-- End footer -->
+        </div>
+        <!-- End Page wrapper  -->
+    </div>
+    <!-- End Wrapper -->
+    <!-- All Jquery -->
+    <script src="{% static "js/lib/jquery/jquery.min.js"%}"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="{% static "js/lib/bootstrap/js/popper.min.js"%}"></script>
+    <script src="{% static "js/lib/bootstrap/js/bootstrap.min.js"%}"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="{% static "js/jquery.slimscroll.js"%}"></script>
+    <!--Menu sidebar -->
+    <script src="{% static "js/sidebarmenu.js"%}"></script>
+    <!--stickey kit -->
+    <script src="{% static "js/lib/sticky-kit-master/dist/sticky-kit.min.js"%}"></script>
+
+
+    <script src="{% static "js/lib/datamap/d3.min.js"%}"></script>
+    <script src="{% static "js/lib/datamap/topojson.js"%}"></script>
+    <script src="{% static "js/lib/datamap/datamaps.world.min.js"%}"></script>
+    <script src="{% static "js/lib/datamap/datamap-init.js"%}"></script>
+
+    <script src="{% static "js/lib/weather/jquery.simpleWeather.min.js"%}"></script>
+    <script src="{% static "js/lib/weather/weather-init.js"%}"></script>
+    <script src="{% static "js/lib/owl-carousel/owl.carousel.min.js"%}"></script>
+    <script src="{% static "js/lib/owl-carousel/owl.carousel-init.js"%}"></script>
+
+
+    <script src="{% static "js/lib/chartist/chartist.min.js"%}"></script>
+    <script src="{% static "js/lib/chartist/chartist-plugin-tooltip.min.js"%}"></script>
+    <script src="{% static "js/lib/chartist/chartist-init.js"%}"></script>
+    <!--Custom JavaScript -->
+    <script src="{% static "js/custom.min.js"%}"></script>
+
 </body>
+
 </html>
